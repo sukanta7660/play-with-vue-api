@@ -19,7 +19,7 @@
 export default {
    data(){
        return{
-           siteName: "Basic API App"
+           siteName: "Sukanta Purkayastha"
        }
    }
 }

@@ -4,13 +4,16 @@
     <div class="container">
       <router-view/>
     </div>
+    <Footer/>
   </div>
 </template>
 <script>
 import Header from "@/components/Shared/Header.vue";
+import Footer from "@/components/Shared/Footer.vue";
 export default {
   components:{
-    Header
+    Header,
+    Footer
   }
 }
 </script>
