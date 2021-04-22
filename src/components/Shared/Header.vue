@@ -10,6 +10,9 @@
         <li class="nav-item">
           <router-link active-class="active" to="/about" class="nav-link" exact>About</router-link>
         </li>
+        <li class="nav-item">
+          <router-link active-class="active" to="/posts" class="nav-link" exact>API Post</router-link>
+        </li>
       </ul>
     </div>
   </div>
