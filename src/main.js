@@ -2,8 +2,12 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 
+//sweet alert
+// import Swal from 'sweetalert2'
+
 // filter
-import filter from "./filter";
+import filter from "@/filter.js";
+
 
 Vue.config.productionTip = false
 
