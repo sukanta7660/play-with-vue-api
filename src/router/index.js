@@ -5,6 +5,8 @@ import About from '../views/About.vue'
 import Post from '../views/Post.vue'
 import PostDetails from '../views/PostDetails.vue'
 import ToDo from '../views/ToDo.vue'
+import Login from '../views/Login.vue'
+import Register from '../views/Register.vue'
 
 Vue.use(VueRouter)
 
@@ -33,6 +35,15 @@ const routes = [
     path: '/todo-app',
     name: 'ToDo',
     component: ToDo
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login
+  },{
+    path: '/register',
+    name: 'Register',
+    component: Register
   }
 ]
 

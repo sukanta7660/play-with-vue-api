@@ -16,6 +16,12 @@
         <li class="nav-item">
           <router-link active-class="active" to="/todo-app" class="nav-link" exact>To-Do App</router-link>
         </li>
+        <li class="nav-item">
+          <router-link active-class="active" to="/login" class="nav-link" exact>Login</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link active-class="active" to="/register" class="nav-link" exact>Register</router-link>
+        </li>
       </ul>
     </div>
   </div>

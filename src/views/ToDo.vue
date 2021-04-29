@@ -42,7 +42,7 @@
         <div class="row mt-5 d-flex justify-content-center">
           <div class="col-md-6 ml-2">
             <hr>
-            <input type="checkbox" id="checkAll" :checked="!anyRemaining" @change="checkAll">
+            <input type="checkbox" id="checkAll" @change="checkAll">
             <label for="checkAll"> Check All</label>
             <span class="float-right">{{remaining}} items left</span>
           </div>
@@ -77,9 +77,6 @@ export default {
   computed:{
     remaining(){
       return this.todolist.filter(todo => !todo.isComplete).length
-    },
-    anyRemaining(){
-      return this.remaining != 0
     },
     todoFilterd(){
       if (this.filter == 'all') {
@@ -138,7 +135,7 @@ export default {
       }
     },
     checkAll(){
-      this.todolist.forEach((todo) => todo.isComplete = true);
+       this.todolist.forEach((todo) => todo.isComplete = todo.isComplete == true ?  false: true);
     },
     clearCompleted(){
       this.todolist = this.todolist.filter(todo => !todo.isComplete)
