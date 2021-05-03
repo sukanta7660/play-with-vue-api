@@ -25,46 +25,36 @@
    </div>
 </template>
 <script>
-import axios from "axios";
-import Swal from 'sweetalert2'
 export default {
     name: 'Register',
     data(){
         return{
             errors: [],
-            name: '',
-            email: '',
-            password: '',
-            confirm_password: '',
+            
+                name: '',
+                email: '',
+                password: '',
+                confirm_password: '',
+            
         }
     },
     methods:{
         saveInfo(){
-            if (this.name && this.email && this.password && this.confirm_password && this.password == this.confirm_password) {
+            let {name, email, password,  confirm_password} = this
+            if (name, email, password, confirm_password) {
                 this.errors = [];
-                axios.post('https://todoapi.monobol.com/api/register/',{name:this.name, email:this.email,password:this.password,password_confirmation:this.confirm_password})
+                this.$http.post('https://todoapi.monobol.com/api/register/',{name, email, password, password_confirmation : confirm_password})
                     .then(() => {
                         this.name = ''
                         this.email = ''
                         this.password = ''
                         this.confirm_password = ''
-                        Swal.fire({
-                            position: 'top-end',
-                            icon: 'success',
-                            title: 'Registration Successful',
-                            showConfirmButton: false,
-                            timer: 1500
-                        })
+                        this.$alert({messages : 'Registration Successful'})
+                        
                         this.$router.push({path: '/login'})
                     })
                     .catch(() => {
-                        Swal.fire({
-                            position: 'top-end',
-                            icon: 'error',
-                            title: 'Something is wrong. You need to fillup the form correctly.',
-                            showConfirmButton: false,
-                            timer: 1500
-                        })
+                        this.$alert({type : 'error', messages : 'Something is wrong. You need to fillup the form correctly.'})
                     })
             }else{
                 this.errors = [];
