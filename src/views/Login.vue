@@ -39,12 +39,18 @@ export default {
        userLogin(){
           if (this.email && this.password) {
              this.errors = [];
-             this.$http.post('https://todoapi.monobol.com/api/login/',{email:this.email,password:this.password}).then((response) => {
+             this.$http.post('https://todoapi.monobol.com/api/login/',{email:this.email,password:this.password})
+             .then((response) => {
                   console.log(response);
                   this.$alert({messages : 'Login Successfull'})
-               }).catch((er) => {
+                  localStorage.setItem("access_token",response.data.access_token);
+                  localStorage.setItem("user",response.data.auth.name);
+                  localStorage.isLoggedIn = true;
+                  this.$router.push({path:'/'})
+               })
+             .catch((er) => {
                   console.log(er);
-                  this.$alert({type : 'error',messages : 'This credentials not matched with our records'})
+                  this.$alert({type : 'error', messages : 'This credentials not matched with our records'})
                })
           }else {
              this.errors = [];
