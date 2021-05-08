@@ -71,8 +71,18 @@ export default {
     return {
       newTodo: '',
       filter: 'all',
-      todolist: []
+      todolist: [],
     }
+  },
+  created () {
+    this.$http.get('https://todoapi.monobol.com/api/todo-list')
+    .then((result) => {
+      //console.log(result.data.data);
+      this.todolist = result.data.data
+      
+    }).catch((err) => {
+      console.log(err);
+    });
   },
   computed:{
     remaining(){
@@ -97,8 +107,10 @@ export default {
   methods:{
     addTodo(){
       if (this.newTodo != "") {
-        this.todolist.push({title: this.newTodo, isComplete: false});
-        Swal.fire({
+        this.$http.post('https://todoapi.monobol.com/api/todo-save/',{title:this.newTodo})
+        .then((result) => {
+          console.log(result);
+          Swal.fire({
           position: 'top-end',
           icon: 'success',
           title: 'Todo has been saved',
@@ -106,6 +118,9 @@ export default {
           timer: 1500
       })
         this.newTodo = "";
+        }).catch((err) => {
+          console.log(err);
+        });
       } else {
         Swal.fire({
           position: 'top-end',
