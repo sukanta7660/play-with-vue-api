@@ -36,7 +36,7 @@
               >To-Do App</router-link
             >
           </li>
-          <li class="nav-item" v-if="signedIn()">
+          <li class="nav-item" v-if="loginStatus">
             <router-link
               active-class="active"
               to="#"
@@ -45,16 +45,14 @@
               >{{ getAuth() }}</router-link
             >
           </li>
-          <li class="nav-item" v-if="signedIn()">
-            <router-link
-              active-class="active"
-              to="#"
+          <li class="nav-item" v-if="loginStatus">
+            <a href="#"
               class="nav-link"
-              exact
-              >Logout</router-link
+              @click.prevent="Logout()"
+              >Logout</a
             >
           </li>
-          <li class="nav-item" v-if="!signedIn()">
+          <li class="nav-item" v-if="!loginStatus">
             <router-link
               active-class="active"
               to="/login"
@@ -63,7 +61,7 @@
               >Login</router-link
             >
           </li>
-          <li class="nav-item" v-if="!signedIn()">
+          <li class="nav-item" v-if="!loginStatus">
             <router-link
               active-class="active"
               to="/register"
@@ -79,19 +77,50 @@
 </template>
 <script>
 export default {
+  props : {
+    loginStatuses : {
+      required : false,
+      default : false
+    }
+  },
+  
   data() {
     return {
       siteName: "Sukanta Purkayastha",
+      loggedIn : localStorage.getItem('isLoggedIn') || false
     };
   },
+  computed : {
+    loginStatus : {
+      set(item){
+        this.loggedIn = item
+      },
+      get(){
+        return this.loggedIn
+      }
+    }
+  },
+  
   methods: {
-    signedIn() {
-      return localStorage.isLoggedIn;
+    Logout(){
+      this.$set(this, 'loggedIn', false);
+      localStorage.removeItem('isLoggedIn')
+      this.$alert({messages : 'You are successfully logged out'})
     },
     getAuth() {
       return localStorage.user;
+     
     },
   },
+  watch  :{
+    loginStatuses : {
+      handler(val){
+        this.loggedIn = val
+      },
+      deep : true,
+      immediate : true
+    }
+  }
 };
 </script>
 <style scoped>

@@ -26,7 +26,9 @@
    </div>
 </template>
 <script>
+import appMixins from '@/mixins/appMixins'
 export default {
+   mixins : [appMixins],
     name: 'Login',
     data(){
         return{
@@ -46,10 +48,13 @@ export default {
                   localStorage.setItem("access_token",response.data.access_token);
                   localStorage.setItem("user",response.data.auth.name);
                   localStorage.isLoggedIn = true;
+                  this.LoggedIn = true
+                  this.$emit('userLoggedIn', true);
                   this.$router.push({path:'/'})
                })
              .catch((er) => {
                   console.log(er);
+                  this.$emit('userLoggedIn', false);
                   this.$alert({type : 'error', messages : 'This credentials not matched with our records'})
                })
           }else {
