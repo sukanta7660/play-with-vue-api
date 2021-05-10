@@ -77,7 +77,6 @@ export default {
   created () {
     this.$http.get('https://todoapi.monobol.com/api/todo-list')
     .then((result) => {
-      //console.log(result.data.data);
       this.todolist = result.data.data
       
     }).catch((err) => {
@@ -118,6 +117,7 @@ export default {
           timer: 1500
       })
         this.newTodo = "";
+        console.log(this.todoFilterd)
         }).catch((err) => {
           console.log(err);
         });
