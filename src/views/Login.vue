@@ -26,70 +26,77 @@
    </div>
 </template>
 <script>
-import appMixins from '@/mixins/appMixins'
+import appMixins from "@/mixins/appMixins";
 export default {
-   mixins : [appMixins],
-    name: 'Login',
-    data(){
-        return{
-            email: '',
-            password:'',
-            errors: [],
+  mixins: [appMixins],
+  name: "Login",
+  data() {
+    return {
+      email: "",
+      password: "",
+      errors: [],
+    };
+  },
+  methods: {
+    userLogin() {
+      if (this.email && this.password) {
+        this.errors = [];
+        this.$http
+          .post("https://todoapi.monobol.com/api/login/", {
+            email: this.email,
+            password: this.password,
+          })
+          .then((response) => {
+            console.log(response);
+            this.$alert({ messages: "Login Successfull" });
+            localStorage.setItem("access_token", response.data.access_token);
+            localStorage.setItem("user", response.data.auth.name);
+            localStorage.isLoggedIn = true;
+            this.LoggedIn = true;
+            this.$emit("userLoggedIn", true);
+            this.$router.push({ path: "/" });
+          })
+          .catch((er) => {
+            console.log(er);
+            this.$emit("userLoggedIn", false);
+            this.$alert({
+              type: "error",
+              messages: "This credentials not matched with our records",
+            });
+          });
+      } else {
+        this.errors = [];
+        if (!this.email) {
+          this.errors.push("Email required");
         }
+        if (!this.password) {
+          this.errors.push("Password Required");
+        }
+      }
     },
-    methods:{
-       userLogin(){
-          if (this.email && this.password) {
-             this.errors = [];
-             this.$http.post('https://todoapi.monobol.com/api/login/',{email:this.email,password:this.password})
-             .then((response) => {
-                  console.log(response);
-                  this.$alert({messages : 'Login Successfull'})
-                  localStorage.setItem("access_token",response.data.access_token);
-                  localStorage.setItem("user",response.data.auth.name);
-                  localStorage.isLoggedIn = true;
-                  this.LoggedIn = true
-                  this.$emit('userLoggedIn', true);
-                  this.$router.push({path:'/'})
-               })
-             .catch((er) => {
-                  console.log(er);
-                  this.$emit('userLoggedIn', false);
-                  this.$alert({type : 'error', messages : 'This credentials not matched with our records'})
-               })
-          }else {
-             this.errors = [];
-             if (!this.email) {
-                this.errors.push('Email required')
-             }
-             if (!this.password) {
-                this.errors.push('Password Required')
-             }
-          }
-       }
-    }
-}
+  },
+};
 </script>
 <style scoped>
 .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
-      .errors b{
-          font-size: 15px;
-          color: brown;
-      }
-      .errors ul li{
-          font-size: 12px;
-          color: red;
-      }
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
+  font-size: 1.125rem;
+  text-anchor: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.errors b {
+  font-size: 15px;
+  color: brown;
+}
+.errors ul li {
+  font-size: 12px;
+  color: red;
+}
+@media (min-width: 768px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+}
 </style>

@@ -27,135 +27,166 @@
         <h3 class="mt-3">ToDo List</h3>
         <hr />
         <ul class="list-group todo-list" v-if="todoFilterd.length > 0">
-          <li class="list-group-item d-flex justify-content-between align-items-center" v-for="todo in todoFilterd" :key="todo.id">
-            <input type="checkbox" name="" id="" v-model="todo.isComplete">
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+            v-for="todo in todoFilterd"
+            :key="todo.id"
+          >
+            <input type="checkbox" name="" id="" v-model="todo.isComplete" />
             <!-- <input type="checkbox" name="" id="" v-if="todo.isComplete == false"> -->
-            <span class="todo-title" :class="{done: todo.isComplete}" @click="doneTodo(todo)">{{todo.title}}</span>
-            <span class="badge"
-              >
-              <button class="btn btn-sm btn-danger" @click="removeTodo(todo)">Remove</button></span>
+            <span
+              class="todo-title"
+              :class="{ done: todo.isComplete }"
+              @click="doneTodo(todo)"
+              >{{ todo.title }}</span
+            >
+            <span class="badge">
+              <button class="btn btn-sm btn-danger" @click="removeTodo(todo)">
+                Remove
+              </button></span
+            >
           </li>
         </ul>
         <h5 v-if="todoFilterd.length == 0">No Items.</h5>
       </div>
-      <div class="col-md-12"> 
+      <div class="col-md-12">
         <div class="row mt-5 d-flex justify-content-center">
           <div class="col-md-6 ml-2">
-            <hr>
-            <input type="checkbox" id="checkAll" @change="checkAll">
+            <hr />
+            <input type="checkbox" id="checkAll" @change="checkAll" />
             <label for="checkAll"> Check All</label>
-            <span class="float-right">{{remaining}} items left</span>
+            <span class="float-right">{{ remaining }} items left</span>
           </div>
         </div>
-        
       </div>
-      <div class="col-md-12"> 
+      <div class="col-md-12">
         <div class="row mt-5 d-flex justify-content-center">
           <div class="col-md-6">
-            <button :class="{ active: filter == 'all' }" class="btn btn-sm btn-default mr-1" @click="filter = 'all'">ALL</button>
-            <button :class="{ active: filter == 'active' }" class="btn btn-sm btn-default mr-1" @click="filter = 'active'">All Active</button>
-            <button :class="{ active: filter == 'completed' }" class="btn btn-sm btn-default mr-1" @click="filter = 'completed'">All Completed</button>
-            <button class="btn btn-sm btn-danger pull-right" v-if="clearCompletedBtn" @click="clearCompleted">Clear Completed</button>
+            <button
+              :class="{ active: filter == 'all' }"
+              class="btn btn-sm btn-default mr-1"
+              @click="filter = 'all'"
+            >
+              ALL
+            </button>
+            <button
+              :class="{ active: filter == 'active' }"
+              class="btn btn-sm btn-default mr-1"
+              @click="filter = 'active'"
+            >
+              All Active
+            </button>
+            <button
+              :class="{ active: filter == 'completed' }"
+              class="btn btn-sm btn-default mr-1"
+              @click="filter = 'completed'"
+            >
+              All Completed
+            </button>
+            <button
+              class="btn btn-sm btn-danger pull-right"
+              v-if="clearCompletedBtn"
+              @click="clearCompleted"
+            >
+              Clear Completed
+            </button>
           </div>
         </div>
-        
       </div>
     </div>
   </div>
 </template>
 <script>
-import Swal from 'sweetalert2'
 export default {
   name: "ToDo",
   data() {
     return {
-      newTodo: '',
-      filter: 'all',
+      newTodo: "",
+      filter: "all",
       todolist: [],
-    }
+    };
   },
-  created () {
-    this.$http.get('https://todoapi.monobol.com/api/todo-list')
-    .then((result) => {
-      this.todolist = result.data.data
-      
-    }).catch((err) => {
-      console.log(err);
-    });
+  created() {
+    this.loadTodos();
   },
-  computed:{
-    remaining(){
-      return this.todolist.filter(todo => !todo.isComplete).length
+  computed: {
+    remaining() {
+      return this.todolist.filter((todo) => !todo.isComplete).length;
     },
-    todoFilterd(){
-      if (this.filter == 'all') {
-        return this.todolist
-      }else if(this.filter == 'active'){
-        return this.todolist.filter(todo => !todo.isComplete)
-        
-      }else if(this.filter == 'completed'){
-        return this.todolist.filter(todo => todo.isComplete)
+    todoFilterd() {
+      if (this.filter == "all") {
+        return this.todolist;
+      } else if (this.filter == "active") {
+        return this.todolist.filter((todo) => !todo.isComplete);
+      } else if (this.filter == "completed") {
+        return this.todolist.filter((todo) => todo.isComplete);
       }
-      return this.todolist
+      return this.todolist;
     },
-    clearCompletedBtn(){
-      return this.todolist.filter(todo => todo.isComplete).length > 0
-    }
-    
+    clearCompletedBtn() {
+      return this.todolist.filter((todo) => todo.isComplete).length > 0;
+    },
   },
-  methods:{
-    addTodo(){
-      if (this.newTodo != "") {
-        this.$http.post('https://todoapi.monobol.com/api/todo-save/',{title:this.newTodo})
+  methods: {
+    loadTodos() {
+      this.$http
+        .get("https://todoapi.monobol.com/api/todo-list")
         .then((result) => {
-          console.log(result);
-          Swal.fire({
-          position: 'top-end',
-          icon: 'success',
-          title: 'Todo has been saved',
-          showConfirmButton: false,
-          timer: 1500
-      })
-        this.newTodo = "";
-        console.log(this.todoFilterd)
-        }).catch((err) => {
+          this.todolist = result.data.data;
+        })
+        .catch((err) => {
           console.log(err);
         });
-      } else {
-        Swal.fire({
-          position: 'top-end',
-          icon: 'error',
-          title: 'You are trying to submit a empty form',
-          showConfirmButton: false,
-          timer: 1500
-      })
-      }
-      
     },
-    removeTodo(todo){
-      this.todolist.splice(this.todolist.indexOf(todo),1)
-      Swal.fire({
-          position: 'top-end',
-          icon: 'success',
-          title: 'Todo has been removed',
-          showConfirmButton: false,
-          timer: 1500
-      })
-    },
-    doneTodo(todo){
-      if (todo.isComplete == true) {
-        todo.isComplete = false
+    addTodo() {
+      if (this.newTodo != "") {
+        this.$http
+          .post("https://todoapi.monobol.com/api/todo-save/", {
+            title: this.newTodo,
+          })
+          .then((result) => {
+            console.log(result);
+            this.$alert({ messages: "Todo has been saved" });
+            this.newTodo = "";
+            this.loadTodos();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       } else {
-        todo.isComplete = true
+        this.$alert({
+          type: "error",
+          messages: "You are trying to submit a empty form",
+        });
       }
     },
-    checkAll(){
-       this.todolist.forEach((todo) => todo.isComplete = todo.isComplete == true ?  false: true);
+    removeTodo(todo) {
+      this.$http
+        .get("https://todoapi.monobol.com/api/todo-remove/" + todo.id)
+        .then(() => {
+          this.$alert({ messages: "Todo has been removed" });
+          this.loadTodos();
+        })
+        .catch(() => {});
     },
-    clearCompleted(){
-      this.todolist = this.todolist.filter(todo => !todo.isComplete)
-    }
-  }
+    doneTodo(todo) {
+      this.$http
+        .get("https://todoapi.monobol.com/api/todo-update/" + todo.id)
+        .then(() => {
+          this.$alert({ messages: "Todo status has been updated" });
+          this.loadTodos();
+        })
+        .catch(() => {});
+    },
+    checkAll() {
+      this.todolist.forEach(
+        (todo) => (todo.isComplete = todo.isComplete == true ? false : true)
+      );
+    },
+    clearCompleted() {
+      this.todolist = this.todolist.filter((todo) => !todo.isComplete);
+    },
+  },
 };
 </script>
 <style scoped>
@@ -164,15 +195,16 @@ export default {
   padding-bottom: 0;
 }
 input[type="checkbox"] {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 span.todo-title {
-    cursor: pointer;
+  cursor: pointer;
 }
 .done {
-		text-decoration: line-through;
+  text-decoration: line-through;
 }
-.active, .btn:hover {
+.active,
+.btn:hover {
   background-color: #666;
   color: white;
 }
