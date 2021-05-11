@@ -37,20 +37,12 @@
             >
           </li>
           <li class="nav-item" v-if="loginStatus">
-            <router-link
-              active-class="active"
-              to="#"
-              class="nav-link"
-              exact
-              >{{ getAuth() }}</router-link
-            >
+            <router-link active-class="active" to="#" class="nav-link" exact>{{
+              getAuth()
+            }}</router-link>
           </li>
           <li class="nav-item" v-if="loginStatus">
-            <a href="#"
-              class="nav-link"
-              @click.prevent="Logout()"
-              >Logout</a
-            >
+            <a href="#" class="nav-link" @click.prevent="Logout()">Logout</a>
           </li>
           <li class="nav-item" v-if="!loginStatus">
             <router-link
@@ -77,50 +69,63 @@
 </template>
 <script>
 export default {
-  props : {
-    loginStatuses : {
-      required : false,
-      default : false
-    }
+  props: {
+    loginStatuses: {
+      required: false,
+      default: false,
+    },
   },
-  
+
   data() {
     return {
       siteName: "Sukanta Purkayastha",
-      loggedIn : localStorage.getItem('isLoggedIn') || false
+      loggedIn: localStorage.getItem("isLoggedIn") || false,
     };
   },
-  computed : {
-    loginStatus : {
-      set(item){
-        this.loggedIn = item
+  computed: {
+    loginStatus: {
+      set(item) {
+        this.loggedIn = item;
       },
-      get(){
-        return this.loggedIn
-      }
-    }
+      get() {
+        return this.loggedIn;
+      },
+    },
   },
-  
+
   methods: {
-    Logout(){
-      this.$set(this, 'loggedIn', false);
-      localStorage.removeItem('isLoggedIn')
-      this.$alert({messages : 'You are successfully logged out'})
+    Logout() {
+      this.$http
+        .get("https://todoapi.monobol.com/api/logout/", {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
+        })
+        .then(() => {
+          this.$router.push({ path: "/" });
+          this.$set(this, "loggedIn", false);
+          localStorage.removeItem("isLoggedIn");
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("user");
+          this.$alert({ messages: "You are successfully logged out" });
+        })
+        .catch(() => {
+          this.$alert({ type: "error", messages: "Something is wrong" });
+        });
     },
     getAuth() {
       return localStorage.user;
-     
     },
   },
-  watch  :{
-    loginStatuses : {
-      handler(val){
-        this.loggedIn = val
+  watch: {
+    loginStatuses: {
+      handler(val) {
+        this.loggedIn = val;
       },
-      deep : true,
-      immediate : true
-    }
-  }
+      deep: true,
+      immediate: true,
+    },
+  },
 };
 </script>
 <style scoped>
