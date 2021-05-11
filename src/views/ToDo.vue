@@ -97,7 +97,9 @@
   </div>
 </template>
 <script>
+import appMixins from "@/mixins/appMixins";
 export default {
+  mixins: [appMixins],
   name: "ToDo",
   data() {
     return {

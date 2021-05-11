@@ -54,7 +54,7 @@ export default {
             localStorage.isLoggedIn = true;
             this.LoggedIn = true;
             this.$emit("userLoggedIn", true);
-            this.$router.push({ path: "/" });
+            window.location.href = "/";
           })
           .catch((er) => {
             console.log(er);
