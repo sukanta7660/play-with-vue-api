@@ -16,4 +16,8 @@ npm run build
 
 # Lints and fixes files
 npm run lint
+<<<<<<< HEAD
 ```
+=======
+```
+>>>>>>> f113d6850e5c619bb4fda66f6b40e2945dc1917a
