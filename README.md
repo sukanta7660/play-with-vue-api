@@ -11,6 +11,3 @@ npm run install
 # serve with hot reload at localhost:8080
 npm run serve
 
-# Compiles and minifies for production
-npm run build
-
