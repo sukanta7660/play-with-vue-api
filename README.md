@@ -1,3 +1,3 @@
 # Todo-List
 
-> Todo App
+> Todo App created by Vue js and laravel
